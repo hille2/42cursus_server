@@ -13,6 +13,6 @@ COPY 	/nginx.conf /etc/nginx/
 COPY 	/index.html /var/www/${USER}42.fr/index.html
 RUN 	openssl req -newkey rsa:4096 -days 365 -nodes -x509 -subj \
 		"${SSL_BODY}" \
-		-keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt 
+		-keyout /etc/ssl/private/example.org.key -out /etc/ssl/example.org.crt
 
 CMD		nginx -g 'daemon off;'
