@@ -4,13 +4,14 @@ services:
   nginx:
     build: ./srcs/nginx/
     container_name: inc_nginx
+    env_file: 
+      .env
     restart: always
     ports: 
       - 443:443
     volumes:
       - /home/${USER}/data/wordpress-files:/var/www/${USER}.42.fr/
-    networks: 
-      - test
+ 
 
   mariadb:
     build: ./srcs/mariadb/
@@ -20,8 +21,7 @@ services:
     restart: always
     volumes:
       - /home/${USER}/data/wordpress-files:/var/www/${USER}.42.fr/
-    networks: 
-      - test
+
   
   wp:
     build: ./srcs/wp/
@@ -34,8 +34,3 @@ services:
       - .env
     volumes:
       - /home/${USER}/data/wordpress-files:/var/www/${USER}.42.fr/
-    networks: 
-      - test
-
-networks: 
-  test:
