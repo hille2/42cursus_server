@@ -2,17 +2,19 @@ version: '3.8'
 services:
 
   nginx:
-    build: ./srcs/nginx/
+    build: 
+      context: ./srcs/nginx/
+      args:
+        USER: ${USER}
+        DOMAIN: "${USER}.intra.42.fr"
+        SSL_BODY: "/C=RU/ST=Republic_of_Tatarstan/L=Kazan/O=Ecole42/OU=School21/CN=sgath/emailAddress=sgath@student.21-school.ru"
     container_name: inc_nginx
-    env_file: 
-      .env
     restart: always
     ports: 
       - 443:443
     volumes:
       - /home/${USER}/data/wordpress-files:/var/www/${USER}.42.fr/
  
-
   mariadb:
     build: ./srcs/mariadb/
     container_name: inc_mariadb
@@ -21,7 +23,6 @@ services:
     restart: always
     volumes:
       - /home/${USER}/data/wordpress-files:/var/www/${USER}.42.fr/
-
   
   wp:
     build: ./srcs/wp/
