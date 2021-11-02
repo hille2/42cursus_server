@@ -5,33 +5,39 @@ services:
     build: 
       context: ./srcs/nginx/
       args:
-        USER: ${USER}
-        DOMAIN: "${USER}.intra.42.fr"
-        SSL_BODY: "/C=RU/ST=Republic_of_Tatarstan/L=Kazan/O=Ecole42/OU=School21/CN=sgath/emailAddress=sgath@student.21-school.ru"
-    container_name: inc_nginx
-    restart: always
-    ports: 
-      - 443:443
+        user: ${USER}
+        ssl_body: ${SSL_BODY}
+        domian: ${DOMIAN}
+    container_name: inception_nginx
     volumes:
-      - /home/${USER}/data/wordpress-files:/var/www/${USER}.42.fr/
- 
+      - ${PATH_VOL}/wordpress-files:/var/www/42.fr/
+    ports:
+      - "443:443"
+    networks:
+      - localhost
+
   mariadb:
     build: ./srcs/mariadb/
-    container_name: inc_mariadb
+    container_name: inception_mariadb
     env_file: 
       .env
     restart: always
     volumes:
-      - /home/${USER}/data/wordpress-files:/var/www/${USER}.42.fr/
+      - ${PATH_VOL}/wordpress-files:/var/www/42.fr/
   
-  wp:
-    build: ./srcs/wp/
-    container_name: inc_wp
+  wordpress:
+    build: ./srcs/wordpress/
+    container_name: inception_wordpress
     restart: always
     depends_on:
       - mariadb
-      - nginx
     env_file: 
       - .env
     volumes:
-      - /home/${USER}/data/wordpress-files:/var/www/${USER}.42.fr/
+      - ${PATH_VOL}/wordpress-files:/var/www/42.fr/
+    networks: 
+      - localhost
+
+networks:
+  localhost:
+    name: inet

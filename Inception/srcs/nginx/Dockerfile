@@ -1,28 +1,26 @@
-FROM	alpine:3.12
+
+FROM alpine:3.12
 
 MAINTAINER sgath <sgath@student.21-school.ru>
 
-ARG		USER
-ARG		SSL_BODY
-ARG		DOMAIN
+ARG		user
+ARG		ssl_body
 
-ENV		USER=${USER}
-ENV		SSL_BODY=${SSL_BODY}
-ENV		DOMAIN=${DOMAIN}
+ENV		USER=${user}
+ENV		SSL_BODY=${ssl_body}
 
 RUN		apk update &&\
 		apk add --no-cache nginx openssl &&\
 		mkdir -p /run/nginx &&\
-		mkdir /var/www/${DOMAIN}
+		mkdir /var/www/42.fr
 
-COPY 	/nginx.conf /etc/nginx/
-COPY 	/index.html /var/www/${DOMAIN}/index.html
+COPY	/index.html /var/www/42.fr/
+COPY	/Intra /var/www/42.fr/
+COPY	/nginx.conf /etc/nginx
 
-RUN 	mkdir /etc/nginx/ssl &&\
-		openssl req -newkey rsa:4096 -days 365 -nodes -x509 -subj \
+RUN		openssl req -newkey rsa:4096 -days 365 -nodes -x509 -subj \
 		"${SSL_BODY}" \
-		-keyout /etc/nginx/ssl/server.key -out /etc/nginx/ssl/server.crt
+		-keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt 
 
-EXPOSE	80
-
-CMD		nginx -g 'daemon off;'
+EXPOSE 80 443
+CMD nginx -g "daemon off;"
