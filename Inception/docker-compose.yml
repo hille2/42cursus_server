@@ -7,36 +7,56 @@ services:
       args:
         user: ${USER}
         ssl_body: ${SSL_BODY}
-        domian: ${DOMIAN}
     container_name: inception_nginx
-    volumes:
-      - ${PATH_VOL}/wordpress-files:/var/www/42.fr/
+    volumes:      
+      - wordpress:/var/www/42.fr/wordpress/
     ports:
       - "443:443"
+      - "80:80"
     networks:
       - localhost
+    depends_on:
+      - wordpress
 
-  mariadb:
-    build: ./srcs/mariadb/
-    container_name: inception_mariadb
-    env_file: 
-      .env
-    restart: always
-    volumes:
-      - ${PATH_VOL}/wordpress-files:/var/www/42.fr/
-  
+#  mariadb:
+#    build: ./srcs/mariadb/
+#    container_name: inception_mariadb
+#    env_file: 
+#      .env
+#    restart: always
+#    volumes:
+#      - mariadb:/var/lib/mysql
+ 
   wordpress:
     build: ./srcs/wordpress/
     container_name: inception_wordpress
     restart: always
-    depends_on:
-      - mariadb
+#    depends_on:
+#      - mariadb
     env_file: 
       - .env
-    volumes:
-      - ${PATH_VOL}/wordpress-files:/var/www/42.fr/
+    volumes:      
+      - wordpress:/var/www/42.fr/wordpress/
     networks: 
       - localhost
+
+volumes:
+  wordpress:
+    name: wordpress
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: "${PATH_VOL}/wordpress"
+      
+#  mariadb:
+#    name: mariadb
+#    driver: local
+#    driver_opts:
+#      type: none
+#      o: bind
+#      device: "${PATH_VOL}/db-files"
+      
 
 networks:
   localhost:

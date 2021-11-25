@@ -5,4 +5,4 @@ mysqld & sleep 5
 
 mysql < /mysql-svc.sql
 pkill mysqld & sleep 5
-supervisord
+mysqld
