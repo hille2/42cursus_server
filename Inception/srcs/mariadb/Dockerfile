@@ -1,22 +1,18 @@
 FROM alpine:3.12
 
-MAINTAINER ${USER} <sgath@student.21-school.ru>
+MAINTAINER sgath <sgath@student.21-school.ru>
 
+RUN apk update && apk add --no-cache mysql mysql-client
 
-RUN		apk update &&\ 
-		apk add --no-cache mysql mysql-client
+COPY /mysql.sh ./mysql.sh
+COPY /my.cnf /etc/my.cnf
 
-RUN mysql_install_db --user=mysql
+COPY /mysql-svc.sql ./mysql-svc.sql
 
-COPY	/my.cnf /etc/my.cnf
-COPY	/mysql-svc.sql .
+RUN chmod +x ./mysql.sh &&\
+	chmod +x /etc/my.cnf
 
-VOLUME /var/lib/mysql
-
-RUN mysqld & sleep 5
-
-#RUN mysql < /mysql-svc.sql
-#RUN pkill mysqld & sleep 5
-ENTRYPOINT ["mysqld_safe"]
-#CMD 	/usr/bin/mysqld_safe
-#./setup.sh
+RUN mkdir /run/mysqld &&\
+	chmod +x /run/mysqld
+EXPOSE 3306
+CMD ./mysql.sh
