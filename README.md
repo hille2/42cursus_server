@@ -19,3 +19,12 @@ This project consist to clusturing an docker-compose application and deploy it w
 This project aims to broaden your knowledge of system administration by using Docker. We virtualize several Docker images, creating them in your new personal virtual machine.
 
 [`subject of Inception`](https://github.com/yukovalski/42cursus_server/blob/master/Inception/en.subject.pdf)
+
+---
+# `Now intall docker in goinfre`
+
+	sudo apt-get remove docker
+	mkdir -p ~/goinfre/docker                
+    rm -rf ~/Library/Containers/com.docker.docker
+    ln -s ~/goinfre/docker ~/Library/Containers/com.docker.docker
+	install docker
