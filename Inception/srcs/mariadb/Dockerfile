@@ -14,5 +14,7 @@ RUN chmod +x ./mysql.sh &&\
 
 RUN mkdir /run/mysqld &&\
 	chmod +x /run/mysqld
+
+RUN mysql_install_db --user=mysql --datadir=/var/lib/mysql
 EXPOSE 3306
 CMD ./mysql.sh
